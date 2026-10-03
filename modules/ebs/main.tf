@@ -2,7 +2,7 @@ resource "aws_ebs_volume" "wordpress" {
   availability_zone = var.availability_zone
   size              = var.size_gb
   type              = "gp3"
-  encrypted         = true
+  encrypted         = false
 
   tags = {
     Name = "${var.namespace}-wordpress-data"
