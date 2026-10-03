@@ -8,7 +8,7 @@ Terraform implementation of the Liora final project in AWS Paris (`eu-west-3`).
 - `t3.micro` EC2 instance using the latest matching Amazon Linux 2023 AMI from an `aws_ami` data source.
 - HTTP access on port 80.
 - Private `db.t3.micro` MySQL RDS instance with `multi_az = true`; MySQL port 3306 is allowed only from the web-server security group.
-- Additional encrypted 10 GiB EBS volume in the same Availability Zone as EC2.
+- Additional 10 GiB EBS volume in the same Availability Zone as EC2.
 - Separate `networking`, `ec2`, `rds`, and `ebs` modules.
 
 The HTTPS bonus is intentionally left out: port 443 alone is not TLS; a certificate and TLS termination would also be required.
