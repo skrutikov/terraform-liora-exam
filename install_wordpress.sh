@@ -6,21 +6,26 @@ DB_USER='${db_username}'
 DB_PASSWORD='${db_password}'
 DB_HOST='${db_host}'
 WORDPRESS_DIR=/var/www/html
-EBS_DEVICE=/dev/sdf
+EBS_DEVICE=""
 
 dnf upgrade -y
 dnf install -y httpd wget php-fpm php-mysqli php-json php php-devel php-mysqlnd
 
-# Wait until Terraform has attached the separately managed EBS volume.
+# Wait until Terraform attaches the separately managed EBS volume.
+# On Nitro-based EC2 instances the requested /dev/sdf name is exposed as an
+# NVMe device, so detect the additional disk rather than assuming its Linux name.
 for attempt in $(seq 1 60); do
-  if [ -b "$EBS_DEVICE" ]; then
-    break
-  fi
+  while read -r device; do
+    if ! lsblk -nrpo MOUNTPOINT "$device" | grep -qx "/"; then
+      EBS_DEVICE="$device"
+      break 2
+    fi
+  done < <(lsblk -dpno NAME,TYPE | awk '$2 == "disk" { print $1 }')
   sleep 5
 done
 
-if [ ! -b "$EBS_DEVICE" ]; then
-  echo "Timed out waiting for $EBS_DEVICE" >&2
+if [ -z "$EBS_DEVICE" ] || [ ! -b "$EBS_DEVICE" ]; then
+  echo "Timed out waiting for the additional EBS volume" >&2
   exit 1
 fi
 
