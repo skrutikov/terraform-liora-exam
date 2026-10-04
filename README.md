@@ -11,6 +11,16 @@ Terraform implementation of the Liora final project in AWS Paris (`eu-west-3`).
 - Additional 10 GiB EBS volume in the same Availability Zone as EC2.
 - Separate `networking`, `ec2`, `rds`, and `ebs` modules.
 
+### Terraform module structure
+
+The following diagram shows how the root module connects the four child modules and how values flow between them.
+
+- Solid arrows represent value flow through module inputs and outputs.
+- Dashed arrows point from a resource to another resource or data source that it uses or depends on.
+- Tags are omitted for clarity, and closely related Terraform resources are grouped into single diagram elements.
+
+![Terraform module structure and dependencies](sources/diagram.png)
+
 The HTTPS bonus is intentionally left out: port 443 alone is not TLS; a certificate and TLS termination would also be required.
 
 ## Credentials
