@@ -58,15 +58,3 @@ module "ebs" {
   instance_id       = module.ec2.instance_id
   size_gb           = 10
 }
-
-output "wordpress_url" {
-  value = "http://${module.ec2.public_ip}"
-}
-
-output "rds_endpoint" {
-  value = module.rds.endpoint
-}
-
-output "ebs_volume_id" {
-  value = module.ebs.volume_id
-}
